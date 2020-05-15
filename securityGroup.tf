@@ -43,5 +43,6 @@ resource "aws_security_group" "gaming_cards_sg" {
 
   tags = {
     Name = "${local.setting["project_name"]}-${terraform.workspace}-sg"
+    Env = terraform.workspace
   }
 }

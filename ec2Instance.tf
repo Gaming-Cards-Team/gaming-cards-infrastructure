@@ -16,22 +16,23 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "gaming_cards" {
   ami             = data.aws_ami.ubuntu.id
-  instance_type   = "t2.micro"
+  instance_type   = local.setting["instance_type"]
   security_groups = [aws_security_group.gaming_cards_sg.name]
-  user_data       = file(local.setting["user_data_path"])
-  key_name        = "nodeInstance"
+  user_data       = file("${local.setting["bash_scripts_path"]}${local.setting["user_data_path"]}")
+  key_name        = local.setting["ssh_key_name"]
 		
   tags = {
     Name = "${local.setting["project_name"]}-${terraform.workspace}"
+    Env = terraform.workspace
   }
 
   provisioner "remote-exec" {
     connection {
       type     = "ssh"
-      user     = "ubuntu"
-      private_key = file("~/.ssh/nodeInstance.pem")
+      user     = local.setting["ssh_user"]
+      private_key = tls_private_key.gaming_cards_tls_private_key.private_key_pem
       host     = self.public_ip
     }
-    scripts = [local.setting["setup_script_path"]]
+    scripts = ["${local.setting["bash_scripts_path"]}${local.setting["setup_script_path"]}"]
   }
 }

@@ -2,6 +2,12 @@ locals {
   settings = {
     default = {
         project_name = "gaming-cards"
+        instance_type = "t2.micro"
+        ssh_user = "ubuntu"
+        ssh_key_name = "gaming_cards_generated_key"
+        algorithm = "RSA"
+        rsa_bits  = 4096
+        bash_scripts_path = "bashScripts/"
     }
     pro  = {
         user_data_path = "userDataPro.sh"
