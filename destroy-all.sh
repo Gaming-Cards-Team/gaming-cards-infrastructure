@@ -1,6 +1,6 @@
 #!/bin/bash
 terraform workspace select qa
-terraform destroy
+terraform destroy -auto-approve
 
 terraform workspace select pro
-terraform destroy
+terraform destroy -auto-approve
