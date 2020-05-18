@@ -30,7 +30,7 @@ resource "aws_instance" "gaming_cards" {
     connection {
       type     = "ssh"
       user     = local.setting["ssh_user"]
-      private_key = tls_private_key.gaming_cards_tls_private_key.private_key_pem
+      private_key = data.tls_public_key.gaming_cards_tls_public_key.private_key_pem
       host     = self.public_ip
     }
     scripts = ["${local.setting["bash_scripts_path"]}${local.setting["setup_script_path"]}"]
