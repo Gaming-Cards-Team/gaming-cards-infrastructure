@@ -1,0 +1,51 @@
+name: Destroy infrastructure
+
+on:
+  schedule:
+  # * is a special character in YAML so you have to quote this string
+  - cron:  '32 13 * * *'
+
+jobs:
+  destroy_infra:
+    name: Destroy infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Code checkout
+      uses: actions/checkout@v2
+
+    - name: Create AWS profile
+      uses: mrchief/aws-creds-okta@master
+      with:
+        aws_role_arn: ${{ secrets.AWS_ROLE }}
+        okta_username: ${{ secrets.OKTA_USERNAME }}
+        okta_password: ${{ secrets.OKTA_PASSWORD }}
+        okta_app_url: ${{ secrets.OKTA_AWS_URL }}
+        okta_mfa_seed: ${{ secrets.OKTA_MFA_SEED }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    - name: Install terraform  
+      run: |
+        mkdir ~/bin
+        wget https://releases.hashicorp.com/terraform/0.12.25/terraform_0.12.25_linux_amd64.zip
+        unzip terraform_0.12.25_linux_amd64.zip
+        mv terraform ~/bin
+        terraform version
+
+    - name: Destroy infrastructure 
+      run: |
+        sh destroy-all.sh
+        
+    - name: Slack Notification
+      uses: sonots/slack-notice-action@v3
+      with:
+        status: ${{ job.status }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: always()
