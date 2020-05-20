@@ -19,7 +19,7 @@ resource "aws_instance" "gaming_cards" {
   instance_type   = local.setting["instance_type"]
   security_groups = [aws_security_group.gaming_cards_sg.name]
   user_data       = file("${local.setting["bash_scripts_path"]}${local.setting["user_data_path"]}")
-  key_name        = local.setting["ssh_key_name"]
+  key_name        = "${local.setting["ssh_key_name"]}-${terraform.workspace}"
 		
   tags = {
     Name = "${local.setting["project_name"]}-${terraform.workspace}"
