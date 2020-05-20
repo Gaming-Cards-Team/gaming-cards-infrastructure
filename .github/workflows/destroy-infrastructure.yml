@@ -3,7 +3,7 @@ name: Destroy infrastructure
 on:
   schedule:
   # * is a special character in YAML so you have to quote this string
-  - cron:  '32 13 * * *'
+  - cron:  '40 13 * * *'
 
 jobs:
   destroy_infra:
