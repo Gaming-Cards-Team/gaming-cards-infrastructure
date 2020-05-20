@@ -35,6 +35,10 @@ jobs:
         unzip terraform_0.12.25_linux_amd64.zip
         mv terraform ~/bin
         terraform version
+
+    - name: Apply infrastructure 
+      run: |
+        sh apply-all.sh
         
     - name: Slack Notification
       uses: sonots/slack-notice-action@v3
