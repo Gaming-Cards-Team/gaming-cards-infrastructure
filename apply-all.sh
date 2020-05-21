@@ -1,4 +1,5 @@
 #!/bin/bash
+terraform init
 terraform workspace select qa
 terraform apply -auto-approve
 
