@@ -28,14 +28,6 @@ jobs:
       env:
         AWS_REGION: ${{ secrets.AWS_REGION }}
 
-    - name: Install terraform  
-      run: |
-        mkdir ~/bin
-        wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
-        unzip terraform_0.12.24_linux_amd64.zip
-        mv terraform ~/bin
-        terraform version
-
     - name: Apply infrastructure 
       run: |
         sh apply-all.sh
