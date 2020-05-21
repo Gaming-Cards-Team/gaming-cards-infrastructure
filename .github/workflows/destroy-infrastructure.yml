@@ -39,6 +39,7 @@ jobs:
 
     - name: Destroy infrastructure 
       run: |
+        terraform init
         sh destroy-all.sh
         
     - name: Slack Notification

@@ -38,6 +38,7 @@ jobs:
 
     - name: Apply infrastructure 
       run: |
+        terraform init
         sh apply-all.sh
         
     - name: Slack Notification
